@@ -1,0 +1,1433 @@
+第01篇 ACM/ICPC竞赛之基础篇 
+一、ACM/ICPC竞赛的特点 
+
+
+ACM/ICPC（国际大学生程序设计竞赛）是以算法设计为主的程序设计竞赛，并不涉及具体的应用技术。 
+
+
+
+
+ACM/ICPC竞赛以组队形式参赛，每个参赛队由三名队员组成，共同使用一台计算机解题。通常每场比赛的试题为6至10题，根据各队的完成题数和罚时进行排名。题目提交通过称为完成，从比赛开始到提交成功所用的时间为题目的基础罚时，另外，一道题目每提交失败一次，将增加20分钟罚时。也就是说，参赛队要尽可能用最快的速度、最少的失败次数，解决最多的题目。 
+
+
+二、输入和输出处理 
+试题一般采用标准输入和输出方式读取输入和产生输出，在题目中会详细描述输入和输出的格式和值域范围，所写的程序一定要严格遵守题目指定的输入输出格式。 
+
+
+在比赛试题的输入和输出处理上，针对一些常见的情形，有一些常用的方法。 
+
+
+1、多测试用例的输入和输出 
+
+
+有些试题在一次输入中只包含一个测试用例，也就是说，程序每运行一次，只算一道题。也有些试题在一次输入中包含多个测试用例，也就是说，程序每运行一次，要计算多道题。 
+
+
+
+
+对多用例输入，通常会先输入要计算的用例的个数，然后依次输入每个测试用例的输入数据，但程序并不需要等到所有的测试用例都计算完后再输出所有测试用例的计算结果，而是可以读入一个测试用例，输出一个结果，再读入一个测试用例，再输出一个结果。因此对多用例输入的试题，可以用这样的输入模式： 
+
+
+以C++为例： 
+
+
+int n; 
+
+
+cin >> n; 
+
+
+for (int i=0; i<n; i++) 
+
+
+{ 
+
+
+读入测试用例数据 
+
+
+计算 
+
+
+输出计算结果 
+
+
+} 
+
+
+2、单测试用例输入的结束判断 
+对单用例输入，最主要的问题是如何知道输入什么时候结束。 
+
+
+有些试题会指定某种特殊的输入值作为输入的结束标志，这种情况比较容易处理，只须在读入后，判断一下读入的内容是否为约定结束值即可。 
+
+
+有些试题并不指定特殊的输入值，而是以EOF（文件结束标志）作为结束标志。如果从文件流读入，当读到文件尾时，输入返回EOF。如果从键盘读入时，在Windows的终端中，是以Ctrl+Z表示EOF。对于这种情况，可以用这样的输入模式： 
+
+
+以C++为例： 
+
+
+int m, n; // 假设要连续输入一组整数对 
+
+
+while (cin>>m>>n) 
+
+
+{ 
+
+
+处理整数对(m, n) 
+
+
+} 
+
+
+以C语言为例： 
+
+
+int m, n; 
+
+
+while (scanf("%d%d", &m, &n)==2) 
+
+
+{ 
+
+
+处理整数对(m, n) 
+
+
+} 
+
+
+三、数据结构的设计 
+很多试题中已经给出了数据量的上限，因此可以很方便地以数组的方式定义数据结构。但也要注意到有些题目中没有明确指出数据上限时，切不可盲目定义数组大小。 
+
+
+
+
+例如在题1070（多项式求和）中，并未说明输入多项式的项数，对这种情况就不宜用数组方式来表示多项式了——除非你的运气足够好，所开辟的数组大小能够经受所有的测试用例的考验。 
+
+
+除了使用一般的数组或链表结构外，对使用C++的选手来说，STL也是一大利器，充分运用可以有效提高编程的效率和正确性。 
+
+
+四、测试用例的考虑 
+在试题中通常会给出测试用例的样例，这通常会被我们用来测试自己的程序，而且很多选手往往在正确计算出测试用例样例时，会认为自己的程序是正确的。 
+
+
+
+
+其实测试用例的样例只是测试用例的个例，实际用于测试的测试用例往往会涵盖各种极限情况和边界情况，而且有时测试用例的数量还会比较大，甚至会重复测试同一个测试用例。因此我们的程序能够通过样例测试，未必能够通过所有的测试用例的测试，一方面要全面考虑所有可能的极限情况和边界情况，一方面程序要有足够的效率。 
+
+
+
+
+
+
+2008-7-17 01:29 回复 
+
+
+
+
+狂晕的迷战士 
+14位粉丝 
+2楼
+第03篇 ACM/ICPC竞赛之STL--pair 
+STL的<utility>头文件中描述了一个看上去非常简单的模板类pair，用来表示一个二元组或元素对，并提供了按照字典序对元素对进行大小比较的比较运算符模板函数。 
+
+
+例如，想要定义一个对象表示一个平面坐标点，则可以： 
+
+
+pair<double, double> p1; 
+cin >> p1.first >> p1.second; 
+
+
+
+
+pair模板类需要两个参数：首元素的数据类型和尾元素的数据类型。pair模板类对象有两个成员：first和second，分别表示首元素和尾元素。 
+
+
+在<utility>中已经定义了pair上的六个比较运算符：<、>、<=、>=、==、!=，其规则是先比较first，first相等时再比较second，这符合大多数应用的逻辑。 
+当然，也可以通过重载这几个运算符来重新指定自己的比较逻辑。 
+
+
+除了直接定义一个pair对象外，如果需要即时生成一个pair对象，也可以调用在<utility>中定义的一个模板函数：make_pair。make_pair需要两个参数， 
+分别为元素对的首元素和尾元素。 
+
+
+在题1067--Ugly Numbers中，就可以用pair来表示推演树上的结点，用first表示结点的值，用second表示结点是由父结点乘以哪一个因子得到的。 
+
+
+#include <iostream> 
+#include <queue> 
+using namespace std; 
+typedef pair<unsigned long, int> node_type; 
+main() 
+{ unsigned long result[1500]; 
+priority_queue< node_type, vector<node_type>, greater<node_type> > Q; 
+Q.push( make_pair(1, 2) ); 
+for (int i=0; i<1500; i++) 
+{ 
+node_type node = Q.top(); 
+Q.pop(); 
+switch(node.second) 
+{ case 2: Q.push( make_pair(node.first*2, 2) ); 
+case 3: Q.push( make_pair(node.first*3, 3) ); 
+case 5: Q.push( make_pair(node.first*5, 5) ); 
+} 
+result[i] = node.first; 
+} 
+int n; cin >> n; 
+while (n>0) 
+{ 
+cout << result[n-1] << endl; 
+cin >> n; 
+} 
+return 1; 
+} 
+<utility>看上去是很简单的一个头文件，但是<utility>的设计中却浓缩反映了STL设计的基本思想。有意深入了解和研究STL的同学，仔细阅读和体会这个简单的头文件， 
+不失为一种入门的途径。
+2008-7-17 01:31 回复 
+
+
+
+
+狂晕的迷战士 
+14位粉丝 
+3楼
+第04篇 ACM/ICPC竞赛之STL--vector 
+在STL的<vector>头文件中定义了vector（向量容器模板类），vector容器以连续数组的方式存储元素序列，可以将vector看作是以顺序结构实现的线性表。 
+当我们在程序中需要使用动态数组时，vector将会是理想的选择，vector可以在使用过程中动态地增长存储空间。 
+
+
+vector模板类需要两个模板参数，第一个参数是存储元素的数据类型，第二个参数是存储分配器的类型，其中第二个参数是可选的，如果不给出第二个参数， 
+将使用默认的分配器。 
+
+
+下面给出几个常用的定义vector向量对象的方法示例： 
+
+
+vector<int> s; 
+定义一个空的vector对象，存储的是int类型的元素。 
+
+
+vector<int> s(n); 
+定义一个含有n个int元素的vector对象。 
+
+
+vector<int> s(first, last); 
+定义一个vector对象，并从由迭代器first和last定义的序列[first, last)中复制初值。 
+
+
+vector的基本操作有： 
+
+
+s[i] 
+直接以下标方式访问容器中的元素。 
+
+
+s.front() 
+返回首元素。 
+
+
+s.back() 
+返回尾元素。 
+
+
+s.push_back(x) 
+向表尾插入元素x。 
+
+
+s.size() 
+返回表长。 
+
+
+s.empty() 
+当表空时，返回真，否则返回假。 
+
+
+s.pop_back() 
+删除表尾元素。 
+
+
+s.begin() 
+返回指向首元素的随机存取迭代器。 
+
+
+s.end() 
+返回指向尾元素的下一个位置的随机存取迭代器。 
+
+
+s.insert(it, x) 
+向迭代器it指向的元素前插入新元素val。 
+
+
+s.insert(it, n, x) 
+向迭代器it指向的元素前插入n个x。 
+
+
+s.insert(it, first, last) 
+将由迭代器first和last所指定的序列[first, last)插入到迭代器it指向的元素前面。 
+
+
+s.erase(it) 
+删除由迭代器it所指向的元素。 
+
+
+s.erase(first, last) 
+删除由迭代器first和last所指定的序列[first, last)。 
+
+
+s.reserve(n) 
+预分配缓冲空间，使存储空间至少可容纳n个元素。 
+
+
+s.resize(n) 
+改变序列的长度，超出的元素将会被删除，如果序列需要扩展（原空间小于n），元素默认值将填满扩展出的空间。 
+
+
+s.resize(n, val) 
+改变序列的长度，超出的元素将会被删除，如果序列需要扩展（原空间小于n），将用val填满扩展出的空间。 
+
+
+s.clear() 
+删除容器中的所有的元素。 
+
+
+s.swap(v) 
+将s与另一个vector对象v进行交换。 
+
+
+s.assign(first, last) 
+将序列替换成由迭代器first和last所指定的序列[first, last)。[first, last)不能是原序列中的一部分。 
+
+
+要注意的是，resize操作和clear操作都是对表的有效元素进行的操作，但并不一定会改变缓冲空间的大小。 
+
+
+另外，vector还有其他一些操作如反转、取反等，不再一下列举。 
+
+
+vector上还定义了序列之间的比较操作运算符(>, <, >=, <=, ==, !=)，可以按照字典序比较两个序列。 
+
+
+还是来看一些示例代码。输入个数不定的一组整数，再将这组整数按倒序输出，如下所示： 
+
+
+#include <iostream> 
+#include <vector> 
+using namespace std; 
+main() 
+{ 
+vector<int> L; 
+int x; 
+while (cin>>x) L.push_back(x); 
+for (int i=L.size()-1; i>=0; i--) cout << L[i] << " "; 
+cout << endl; 
+return 1; 
+}
+2008-7-17 01:31 回复 
+
+
+
+
+狂晕的迷战士 
+14位粉丝 
+4楼
+第04篇 ACM/ICPC竞赛之STL--vector 
+在STL的<vector>头文件中定义了vector（向量容器模板类），vector容器以连续数组的方式存储元素序列，可以将vector看作是以顺序结构实现的线性表。 
+当我们在程序中需要使用动态数组时，vector将会是理想的选择，vector可以在使用过程中动态地增长存储空间。 
+
+
+vector模板类需要两个模板参数，第一个参数是存储元素的数据类型，第二个参数是存储分配器的类型，其中第二个参数是可选的，如果不给出第二个参数， 
+将使用默认的分配器。 
+
+
+下面给出几个常用的定义vector向量对象的方法示例： 
+
+
+vector<int> s; 
+定义一个空的vector对象，存储的是int类型的元素。 
+
+
+vector<int> s(n); 
+定义一个含有n个int元素的vector对象。 
+
+
+vector<int> s(first, last); 
+定义一个vector对象，并从由迭代器first和last定义的序列[first, last)中复制初值。 
+
+
+vector的基本操作有： 
+
+
+s[i] 
+直接以下标方式访问容器中的元素。 
+
+
+s.front() 
+返回首元素。 
+
+
+s.back() 
+返回尾元素。 
+
+
+s.push_back(x) 
+向表尾插入元素x。 
+
+
+s.size() 
+返回表长。 
+
+
+s.empty() 
+当表空时，返回真，否则返回假。 
+
+
+s.pop_back() 
+删除表尾元素。 
+
+
+s.begin() 
+返回指向首元素的随机存取迭代器。 
+
+
+s.end() 
+返回指向尾元素的下一个位置的随机存取迭代器。 
+
+
+s.insert(it, x) 
+向迭代器it指向的元素前插入新元素val。 
+
+
+s.insert(it, n, x) 
+向迭代器it指向的元素前插入n个x。 
+
+
+s.insert(it, first, last) 
+将由迭代器first和last所指定的序列[first, last)插入到迭代器it指向的元素前面。 
+
+
+s.erase(it) 
+删除由迭代器it所指向的元素。 
+
+
+s.erase(first, last) 
+删除由迭代器first和last所指定的序列[first, last)。 
+
+
+s.reserve(n) 
+预分配缓冲空间，使存储空间至少可容纳n个元素。 
+
+
+s.resize(n) 
+改变序列的长度，超出的元素将会被删除，如果序列需要扩展（原空间小于n），元素默认值将填满扩展出的空间。 
+
+
+s.resize(n, val) 
+改变序列的长度，超出的元素将会被删除，如果序列需要扩展（原空间小于n），将用val填满扩展出的空间。 
+
+
+s.clear() 
+删除容器中的所有的元素。 
+
+
+s.swap(v) 
+将s与另一个vector对象v进行交换。 
+
+
+s.assign(first, last) 
+将序列替换成由迭代器first和last所指定的序列[first, last)。[first, last)不能是原序列中的一部分。 
+
+
+要注意的是，resize操作和clear操作都是对表的有效元素进行的操作，但并不一定会改变缓冲空间的大小。 
+
+
+另外，vector还有其他一些操作如反转、取反等，不再一下列举。 
+
+
+vector上还定义了序列之间的比较操作运算符(>, <, >=, <=, ==, !=)，可以按照字典序比较两个序列。 
+
+
+还是来看一些示例代码。输入个数不定的一组整数，再将这组整数按倒序输出，如下所示： 
+
+
+#include <iostream> 
+#include <vector> 
+using namespace std; 
+main() 
+{ 
+vector<int> L; 
+int x; 
+while (cin>>x) L.push_back(x); 
+for (int i=L.size()-1; i>=0; i--) cout << L[i] << " "; 
+cout << endl; 
+return 1; 
+}
+2008-7-17 01:32 回复 
+
+
+
+
+狂晕的迷战士 
+14位粉丝 
+5楼
+第05篇 ACM/ICPC竞赛之STL--iterator简介 
+iterator(迭代器)是用于访问容器中元素的指示器，从这个意义上说，iterator(迭代器)相当于数据结构中所说的“遍历指针”，也可以把iterator(迭代器)看作是一种泛化的指针。 
+
+
+STL中关于iterator(迭代器)的实现是相当复杂的，这里我们暂时不去详细讨论关于iterator(迭代器)的实现和使用，而只对iterator(迭代器)做一点简单的介绍。 
+
+
+简单地说，STL中有以下几类iterator(迭代器)： 
+
+
+输入iterator(迭代器)，在容器的连续区间内向前移动，可以读取容器内任意值； 
+输出iterator(迭代器)，把值写进它所指向的容器中； 
+前向iterator(迭代器)，读取队列中的值，并可以向前移动到下一位置(++p,p++)； 
+双向iterator(迭代器)，读取队列中的值，并可以向前向后遍历容器； 
+随机访问iterator(迭代器), 可以直接以下标方式对容器进行访问，vector的iterator(迭代器)就是这种iterator(迭代器)； 
+流iterator(迭代器)，可以直接输出、输入流中的值； 
+每种STL容器都有自己的iterator(迭代器)子类，下面先来看一段简单的示例代码： 
+
+
+#include <iostream> 
+#include <vector> 
+using namespace std; 
+main() 
+{ 
+vector<int> s; 
+for (int i=0; i<10; i++) s.push_back(i); 
+for (vector<int>::iterator it=s.begin(); it!=s.end(); it++) 
+cout << *it << " "; 
+cout << endl; 
+return 1; 
+} 
+
+
+vector的begin()和end()方法都会返回一个vector::iterator对象，分别指向vector的首元素位置和尾元素的下一个位置（我们可以称之为结束标志位置）。 
+
+
+对一个iterator(迭代器)对象的使用与一个指针变量的使用极为相似，或者可以这样说，指针就是一个非常标准的iterator(迭代器)。 
+
+
+再来看一段稍微特别一点的代码： 
+
+
+#include <iostream> 
+#include <vector> 
+using namespace std; 
+main() 
+{ 
+vector<int> s; 
+s.push_back(1); 
+s.push_back(2); 
+s.push_back(3); 
+copy(s.begin(), s.end(), ostream_iterator<int>(cout, " ")); 
+cout <<endl; 
+return 1; 
+} 
+
+
+这段代码中的copy就是STL中定义的一个模板函数，copy(s.begin(), s.end(), ostream_iterator<int>(cout, " "));的意思是将由s.begin()至s.end()(不含s.end())所指定的序列复制到标准输出流cout中，用" "作为每个元素的间隔。也就是说，这句话的作用其实就是将表中的所有内容依次输出。 
+
+
+iterator(迭代器)是STL容器和算法之间的“胶合剂”，几乎所有的STL算法都是通过容器的iterator(迭代器)来访问容器内容的。只有通过有效地运用iterator(迭代器)，才能够有效地运用STL强大的算法功能。
+2008-7-17 01:32 回复 
+
+
+
+
+狂晕的迷战士 
+14位粉丝 
+6楼
+第05篇 ACM/ICPC竞赛之STL--iterator简介 
+iterator(迭代器)是用于访问容器中元素的指示器，从这个意义上说，iterator(迭代器)相当于数据结构中所说的“遍历指针”，也可以把iterator(迭代器)看作是一种泛化的指针。 
+
+
+STL中关于iterator(迭代器)的实现是相当复杂的，这里我们暂时不去详细讨论关于iterator(迭代器)的实现和使用，而只对iterator(迭代器)做一点简单的介绍。 
+
+
+简单地说，STL中有以下几类iterator(迭代器)： 
+
+
+输入iterator(迭代器)，在容器的连续区间内向前移动，可以读取容器内任意值； 
+输出iterator(迭代器)，把值写进它所指向的容器中； 
+前向iterator(迭代器)，读取队列中的值，并可以向前移动到下一位置(++p,p++)； 
+双向iterator(迭代器)，读取队列中的值，并可以向前向后遍历容器； 
+随机访问iterator(迭代器), 可以直接以下标方式对容器进行访问，vector的iterator(迭代器)就是这种iterator(迭代器)； 
+流iterator(迭代器)，可以直接输出、输入流中的值； 
+每种STL容器都有自己的iterator(迭代器)子类，下面先来看一段简单的示例代码： 
+
+
+#include <iostream> 
+#include <vector> 
+using namespace std; 
+main() 
+{ 
+vector<int> s; 
+for (int i=0; i<10; i++) s.push_back(i); 
+for (vector<int>::iterator it=s.begin(); it!=s.end(); it++) 
+cout << *it << " "; 
+cout << endl; 
+return 1; 
+} 
+
+
+vector的begin()和end()方法都会返回一个vector::iterator对象，分别指向vector的首元素位置和尾元素的下一个位置（我们可以称之为结束标志位置）。 
+
+
+对一个iterator(迭代器)对象的使用与一个指针变量的使用极为相似，或者可以这样说，指针就是一个非常标准的iterator(迭代器)。 
+
+
+再来看一段稍微特别一点的代码： 
+
+
+#include <iostream> 
+#include <vector> 
+using namespace std; 
+main() 
+{ 
+vector<int> s; 
+s.push_back(1); 
+s.push_back(2); 
+s.push_back(3); 
+copy(s.begin(), s.end(), ostream_iterator<int>(cout, " ")); 
+cout <<endl; 
+return 1; 
+} 
+
+
+这段代码中的copy就是STL中定义的一个模板函数，copy(s.begin(), s.end(), ostream_iterator<int>(cout, " "));的意思是将由s.begin()至s.end()(不含s.end())所指定的序列复制到标准输出流cout中，用" "作为每个元素的间隔。也就是说，这句话的作用其实就是将表中的所有内容依次输出。 
+
+
+iterator(迭代器)是STL容器和算法之间的“胶合剂”，几乎所有的STL算法都是通过容器的iterator(迭代器)来访问容器内容的。只有通过有效地运用iterator(迭代器)，才能够有效地运用STL强大的算法功能。
+2008-7-17 01:33 回复 
+
+
+
+
+狂晕的迷战士 
+14位粉丝 
+7楼
+第06篇 ACM/ICPC竞赛之STL--string 
+字符串是程序中经常要表达和处理的数据，我们通常是采用字符数组或字符指针来表示字符串。STL为我们提供了另一种使用起来更为便捷的字符串的表达方式：string。string类的定义在头文件<string>中。 
+
+
+string类其实可以看作是一个字符的vector，vector上的各种操作都可以适用于string，另外，string类对象还支持字符串的拼合、转换等操作。 
+
+
+下面先来看一个简单的例子： 
+
+
+#include <iostream> 
+#include <string> 
+using namespace std; 
+main() 
+{ 
+string s = "Hello! ", name; 
+cin >> name; 
+s += name; 
+s += '!'; 
+cout << s << endl; 
+return 1; 
+} 
+
+
+
+
+再以题1064--Parencoding为例，看一段用string作为容器，实现由P代码还原括号字符串的示例代码片段： 
+
+
+int m; 
+cin >> m; // P编码的长度 
+string str; // 用来存放还原出来的括号字符串 
+int leftpa = 0; // 记录已出现的左括号的总数 
+for (int j=0; j<m; j++) 
+{ 
+int p; 
+cin >> p; 
+for (int k=0; k<p-leftpa; k++) str += '('; 
+str += ')'; 
+leftpa = p; 
+}
+2008-7-17 01:33 回复 
+
+
+
+
+狂晕的迷战士 
+14位粉丝 
+9楼
+
+
+看下面这个简单的示例： 
+
+
+#include <iostream> 
+#include <queue> 
+using namespace std; 
+class T 
+{ 
+public: 
+int x, y, z; 
+T(int a, int b, int c):x(a), y(b), z? 
+{ 
+} 
+}; 
+bool operator < (const T &t1, const T &t2) 
+{ 
+return t1.z < t2.z; // 按照z的顺序来决定t1和t2的顺序 
+} 
+main() 
+{ 
+priority_queue<T> q; 
+q.push(T(4,4,3)); 
+q.push(T(2,2,5)); 
+q.push(T(1,5,4)); 
+q.push(T(3,3,6)); 
+
+
+while (!q.empty()) 
+{ 
+T t = q.top(); q.pop(); 
+cout << t.x << " " << t.y << " " << t.z << endl; 
+} 
+return 1; 
+} 
+
+
+输出结果为(注意是按照z的顺序从大到小出队的)： 
+
+
+3 3 6 
+2 2 5 
+1 5 4 
+4 4 3 
+
+
+再看一个按照z的顺序从小到大出队的例子： 
+
+
+#include <iostream> 
+#include <queue> 
+using namespace std; 
+class T 
+{ 
+public: 
+int x, y, z; 
+T(int a, int b, int c):x(a), y(b), z? 
+{ 
+} 
+}; 
+bool operator > (const T &t1, const T &t2) 
+{ 
+return t1.z > t2.z; 
+} 
+main() 
+{ 
+priority_queue<T, vector<T>, greater<T> > q; 
+q.push(T(4,4,3)); 
+q.push(T(2,2,5)); 
+q.push(T(1,5,4)); 
+q.push(T(3,3,6)); 
+
+
+while (!q.empty()) 
+{ 
+T t = q.top(); q.pop(); 
+cout << t.x << " " << t.y << " " << t.z << endl; 
+} 
+return 1; 
+} 
+
+
+输出结果为： 
+
+
+4 4 3 
+1 5 4 
+2 2 5 
+3 3 6 
+
+
+如果我们把第一个例子中的比较运算符重载为： 
+
+
+bool operator < (const T &t1, const T &t2) 
+{ 
+return t1.z > t2.z; // 按照z的顺序来决定t1和t2的顺序 
+} 
+
+
+则第一个例子的程序会得到和第二个例子的程序相同的输出结果。 
+
+
+再回顾一下用优先队列实现的题1067--Ugly Numbers的代码： 
+
+
+#include <iostream> 
+#include <queue> 
+using namespace std; 
+typedef pair<unsigned long int, int> node_type; 
+main( int argc, char *argv[] ) 
+{ 
+unsigned long int result[1500]; 
+priority_queue< node_type, vector<node_type>, greater<node_type> > Q; 
+Q.push( make_pair(1, 3) ); 
+for (int i=0; i<1500; i++) 
+{ 
+node_type node = Q.top(); 
+Q.pop(); 
+switch(node.second) 
+{ 
+case 3: Q.push( make_pair(node.first*2, 3) ); 
+case 2: Q.push( make_pair(node.first*3, 2) ); 
+case 1: Q.push( make_pair(node.first*5, 1) ); 
+} 
+result[i] = node.first; 
+} 
+int n; 
+cin >> n; 
+while (n>0) 
+{ 
+cout << result[n-1] << endl; 
+cin >> n; 
+} 
+return 1; 
+}
+2008-7-17 01:34 回复 
+
+
+
+
+狂晕的迷战士 
+14位粉丝 
+10楼
+第09篇 ACM/ICPC竞赛之STL--algorithm 
+<algorithm>无疑是STL中最大的一个头文件，它是由一大堆模板函数组成的。 
+
+
+下面列举出<algorithm>中的模板函数： 
+
+
+adjacent_find / binary_search / copy / copy_backward / count / count_if / equal / equal_range / fill / fill_n / find / find_end / find_first_of / find_if / for_each / generate / generate_n / includes / inplace_merge / iter_swap / lexicographical_compare / lower_bound / make_heap / max / max_element / merge / min / min_element / mismatch / next_permutation / nth_element / partial_sort / partial_sort_copy / partition / pop_heap / prev_permutation / push_heap / random_shuffle / remove / remove_copy / remove_copy_if / remove_if / replace / replace_copy / replace_copy_if / replace_if / reverse / reverse_copy / rotate / rotate_copy / search / search_n / set_difference / set_intersection / set_symmetric_difference / set_union / sort / sort_heap / stable_partition / stable_sort / swap / swap_ranges / transform / unique / unique_copy / upper_bound 
+
+
+如果详细叙述每一个模板函数的使用，足够写一本书的了。还是来看几个简单的示例程序吧。 
+
+
+示例程序之一，for_each遍历容器： 
+
+
+#include <iostream> 
+#include <vector> 
+#include <algorithm> 
+using namespace std; 
+
+
+int Visit(int v) // 遍历算子函数 
+{ 
+cout << v << " "; 
+return 1; 
+} 
+
+
+class MultInt // 定义遍历算子类 
+{ 
+private: 
+int factor; 
+public: 
+MultInt(int f) : factor(f) 
+{ 
+} 
+void operator()(int &elem) const 
+{ 
+elem *= factor; 
+} 
+}; 
+
+
+main() 
+{ 
+vector<int> L; 
+for (int i=0; i<10; i++) L.push_back(i); 
+for_each(L.begin(), L.end(), Visit); 
+cout << endl; 
+for_each(L.begin(), L.end(), MultInt(2)); 
+for_each(L.begin(), L.end(), Visit); 
+cout << endl; 
+return 1; 
+} 
+
+
+程序的输出结果为： 
+
+
+0 1 2 3 4 5 6 7 8 9 
+0 2 4 6 8 10 12 14 16 18 
+
+
+示例程序之二，min_element/max_element，找出容器中的最小/最大值： 
+
+
+#include <iostream> 
+#include <vector> 
+#include <algorithm> 
+using namespace std; 
+
+
+main() 
+{ 
+vector<int> L; 
+for (int i=0; i<10; i++) L.push_back(i); 
+vector<int>::iterator min_it = min_element(L.begin(), L.end()); 
+vector<int>::iterator max_it = max_element(L.begin(), L.end()); 
+cout << "Min is " << *min_it << endl; 
+cout << "Max is " << *max_it << endl; 
+return 1; 
+} 
+
+
+程序的输出结果为： 
+
+
+Min is 0 
+Max is 9 
+
+
+示例程序之三，sort对容器进行排序： 
+
+
+#include <iostream> 
+#include <vector> 
+#include <algorithm> 
+using namespace std; 
+void Print(vector<int> &L) 
+{ 
+for (vector<int>::iterator it=L.begin(); it!=L.end(); it++) 
+cout << *it << " "; 
+cout << endl; 
+} 
+main() 
+{ 
+vector<int> L; 
+for (int i=0; i<5; i++) L.push_back(i); 
+for (int i=9; i>=5; i--) L.push_back(i); 
+Print(L); 
+sort(L.begin(), L.end()); 
+Print(L); 
+sort(L.begin(), L.end(), greater<int>()); // 按降序排序 
+Print(L); 
+return 1; 
+} 
+
+
+程序的输出结果为： 
+
+
+0 1 2 3 4 9 8 7 6 5 
+0 1 2 3 4 5 6 7 8 9 
+9 8 7 6 5 4 3 2 1 0 
+
+
+示例程序之四，copy在容器间复制元素： 
+
+
+#include <vector> 
+#include <algorithm> 
+#include <iostream> 
+using namespace std; 
+main( ) 
+{ 
+// 先初始化两个向量v1和v2 
+vector <int> v1, v2; 
+for (int i=0; i<=5; i++) v1.push_back(10*i); 
+for (int i=0; i<=10; i++) v2.push_back(3*i); 
+
+
+cout << "v1 = ( " ; 
+for (vector <int>::iterator it=v1.begin(); it!=v1.end(); it++) 
+cout << *it << " "; 
+cout << ")" << endl; 
+
+
+cout << "v2 = ( " ; 
+for (vector <int>::iterator it=v2.begin(); it!=v2.end(); it++) 
+cout << *it << " "; 
+cout << ")" << endl; 
+
+
+// 将v1的前三个元素复制到v2的中间 
+copy(v1.begin(), v1.begin()+3, v2.begin()+4); 
+
+
+cout << "v2 with v1 insert = ( " ; 
+for (vector <int>::iterator it=v2.begin(); it!=v2.end(); it++) 
+cout << *it << " "; 
+cout << ")" << endl; 
+
+
+// 在v2内部进行复制，注意参数2表示结束位置，结束位置不参与复制 
+copy(v2.begin()+4, v2.begin()+7, v2.begin()+2); 
+
+
+cout << "v2 with shifted insert = ( " ; 
+for (vector <int>::iterator it=v2.begin(); it!=v2.end(); it++) 
+cout << *it << " "; 
+cout << ")" << endl; 
+return 1; 
+} 
+
+
+程序的输出结果为： 
+
+
+v1 = ( 0 10 20 30 40 50 ) 
+v2 = ( 0 3 6 9 12 15 18 21 24 27 30 ) 
+v2 with v1 insert = ( 0 3 6 9 0 10 20 21 24 27 30 ) 
+v2 with shifted insert = ( 0 3 0 10 20 10 20 21 24 27 30 )
+2008-7-17 01:37 回复 
+
+
+
+
+狂晕的迷战士 
+14位粉丝 
+11楼
+第10篇 ACM/ICPC竞赛之算法策略 
+ACM/ICPC竞赛其实就是算法设计和编码的竞赛，熟悉各种常用算法和算法设计策略并能灵活运用是非常必要的。 
+
+
+这里对几种在竞赛中经常用到的算法设计策略做一简单的介绍。 
+
+
+1、穷举法 
+穷举法是最基本的算法设计策略，其思想是列举出问题所有的可能解，逐一进行判别，找出满足条件的解。 
+
+
+穷举法的运用关键在于解决两个问题： 
+
+
+如何列举所有的可能解； 
+
+
+如何判别可能解是否满足条件； 
+
+
+在运用穷举法时，容易出现的问题是可能解过多，导致算法效率很低，这就需要对列举可能解的方法进行优化。 
+
+
+以题1041--纯素数问题为例，从1000到9999都可以看作是可能解，可以通过对所有这些可能解逐一进行判别，找出其中的纯素数，但只要稍作分析，就会发现其实可以大幅度地降低可能解的范围。根据题意易知，个位只可能是3、5、7，再根据题意可知，可以在3、5、7的基础上，先找出所有的二位纯素数，再在二位纯素数基础上找出三位纯素数，最后在三位纯素数的基础上找出所有的四位纯素数。 
+
+
+2、分治法 
+分治法也是应用非常广泛的一种算法设计策略，其思想是将问题分解为若干子问题，从而可以递归地求解各子问题，再综合出问题的解。 
+
+
+分治法的运用关键在于解决三个问题： 
+
+
+确定分治规则，即如何分解问题。 
+
+
+确定终结条件，即问题分解到什么状态时可以直接求解。 
+
+
+确定归纳方法，即如何由子问题的解得到原问题的解。这一步并不总是需要的，因为对某些问题来说，并不需要对子问题的解进行复杂的归纳。 
+
+
+我们熟知的如汉诺塔问题、折半查找算法、快速排序算法等都是分治法运用的典型案例。 
+
+
+以题1045--Square Coins为例，先对题意进行分析，可设一个函数f(m, n)等于用面值不超过n2的货币构成总值为m的方案数，则容易推导出： 
+
+
+f(m, n) = f(m-0*n*n, n-1)+f(m-1*n*n, n-1)+f(m-2*n*n, n-1)+...+f(m-k*n*n, n-1) 
+这里的k是币值为n2的货币最多可以用多少枚，即k=m/(n*n)。 
+
+
+也很容易分析出，f(m, 1) = f(1, n) = 1 
+
+
+对于这样的题目，一旦分析出了递推公式，程序就非常好写了。所以在动手开始写程序之前，分析工作做得越彻底，逻辑描述越准确、简洁，写起程序来就会越容易。 
+
+
+3、动态规划法 
+动态规划法多用来计算最优问题，动态规划法与分治法的基本思想是一致的，但处理的手法不同。动态规划法在运用时，要先对问题的分治规律进行分析，找出终结子问题，以及子问题向父问题归纳的规则，而算法则直接从终结子问题开始求解，逐层向上归纳，直到归纳出原问题的解。 
+
+
+动态规划法多用于在分治过程中，子问题可能重复出现的情况，在这种情况下，如果按照常规的分治法，自上向下分治求解，则重复出现的子问题就会被重复地求解，从而增大了冗余计算量，降低了求解效率。而采用动态规划法，自底向上求解，每个子问题只计算一次，就可以避免这种重复的求解了。 
+
+
+动态规划法还有另外一种实现形式，即备忘录法。备忘录的基本思想是设立一个称为备忘录的容器，记录已经求得解的子问题及其解。仍然采用与分治法相同的自上向下分治求解的策略，只是对每一个分解出的子问题，先在备忘录中查找该子问题，如果备忘录中已经存在该子问题，则不须再求解，可以从备忘录中直接得到解，否则，对子问题递归求解，且每求得一个子问题的解，都将子问题及解存入备忘录中。 
+
+
+例如，在题1045--Square Coins中，可以采用分治法求解，也可以采用动态规划法求解，即从f(m, 1)和f(1, n)出发，逐层向上计算，直到求得f(m, n)。 
+
+
+在竞赛中，动态规划和备忘录的思想还可以有另一种用法。有些题目中的可能问题数是有限的，而在一次运行中可能需要计算多个测试用例，可以采用备忘录的方法，预先将所有的问题的解记录下来，然后输入一个测试用例，就查备忘录，直接找到答案输出。这在各问题之间存在父子关系的情况下，会更有效。例如，在题1045--Square Coins中，题目中已经指出了最大的目标币值不超过300，也就是说问题数只有300个，而且各问题的计算中存在重叠的子问题，可以采用动态规划法，将所有问题的解先全部计算出来，再依次输入测试用例数据，并直接输出答案。 
+
+
+4、回溯法
+回溯法是基于问题状态树搜索的求解法，其可适用范围很广。从某种角度上说，可以把回溯法看作是优化了的穷举法。回溯法的基本思想是逐步构造问题的可能解，一边构造，一边用约束条件进行判别，一旦发现已经不可能构造出满足条件的解了，则退回上一步构造过程，重新进行构造。这个退回的过程，就称之为“回溯”。 
+
+
+回溯法在运用时，要解决的关键问题在于： 
+
+
+如何描述局部解。 
+
+
+如何扩展局部解和回溯局部解。 
+
+
+如何判别局部解。 
+
+
+回溯法的经典案例也很多，例如全排列问题、N后问题等。 
+
+
+5、贪心法 
+贪心法也是求解最优问题的常用算法策略，利用贪心法策略所设计的算法，通常效率较高，算法简单。贪心法的基本思想是对问题做出目前看来最好的选择，即贪心选择，并使问题转化为规模更小的子问题。如此迭代，直到子问题可以直接求解。 
+
+
+基于贪心法的经典算法例如：哈夫曼算法、最小生成树算法、最短路径算法等。 
+
+
+但是，贪心法的运用是有条件的，必须能够证明贪心选择能够导出最优解，且转化出的子问题与原问题是同性质的问题，才能使用贪心法求解。 
+
+
+一个比较经典的贪心法求解的问题就是找硬币问题：有1、2、5、10、20、50、100七种面值的硬币，要支付指定的金额，问怎么支付所用的硬币个数最少。这是一个非常日常化的问题，凭直觉我们会想到，尽可能先用大面值的硬币，这就是“贪心选择”，而在这个问题上，这个贪心选择也是正确的。 
+
+
+6、限界剪枝法 
+限界剪枝法是求解较复杂最优问题的一种算法策略，与回溯法类似的是，限界剪枝法也是在问题状态空间树上进行搜索，但回溯法是搜索一般解，而限界剪枝法则是搜索最优解。限界剪枝法的基本思想是通过找出权值函数的上下界函数，以下界函数来指导搜索的方向，以上界函数来帮助剪除一些不可能含有最优解的分枝。 
+
+
+关于算法和算法策略的讨论是一个非常庞大的话题，几乎每个问题点都能扩展出一大堆可讨论的内容和案例。我实在不知道该怎样用简短的几篇文字就能够把这个话题说透，这里只能蜻蜓点水地对竞赛中经常用到的几种策略做一极为简略的介绍。 
+
+
+也许我们可以在以后的文章中，针对具体的题目进行算法和策略的分析，效果可能会更好。
+2008-7-17 01:37 回复 
+
+
+
+
+狂晕的迷战士 
+14位粉丝 
+12楼
+第11篇 ACM/ICPC竞赛之调试 
+在写程序时，调试程序也是一个重要的环节。怎样才能够更有效地调试程序，发现并修正错误呢？ 
+
+
+1、调试中的输入输出 
+为了调试程序，我们可能需要反复执行程序，也就需要反复输入相同或不相同的测试数据。如果每次调试运行时都是以手工的方式输入测试数据，相信很多人都会觉得不胜其烦。其实我们可以用一些辅助的手段来简化这个过程。 
+
+
+方法一：使用剪贴板 
+
+
+可以将输入数据预先写好（用记事本、开发环境的编辑器或随便什么能够录入的东西），再将输入数据复制到剪贴板上（也就是说我们通常所说的复制操作）。在调试运行时，就可以直接将输入数据粘贴上去，不需要手工输入，这对于反复调试同一组测试数据尤其方便。 
+
+
+方法二：使用重定向 
+
+
+使用剪贴板对于多组测试数据或者比较长的测试数据就会显得不那么好用了。而使用输入输出的重定向则会更方便。 
+
+
+输入输出重定向是在终端窗口下的一种命令行功能，在命令行上可以用“<”表示输入重定向，在“<”后跟随输入文件名，则程序将从指定的输入文件中获取输入数据，而不再从键盘读入数据。也可以用“>”表示输出重定向。在“>”后跟输出文件名，则程序产生的标准输出将写入指定的输出文件中，而不是显示在屏幕上。 
+
+
+我们可以预先将输入数据存到文本文件中（如果有多组测试数据，可以存成多个文件），用重定向指定准备使用的输入数据。 
+
+
+例如，程序名为myprog，输入数据已经存到文件test.txt中，则在命令行下可以这样执行： 
+
+
+C:>myprog < test.txt 
+
+
+则程序会直接从test.txt中读取输入。如果想把输出结果也存到文件中（这在输出结果比较多的时候尤其有用，因为直接输出到屏幕上可能会来不及看到输出，或看不全所有的输出），例如，可以这样执行： 
+
+
+C:>myprog > test.out 
+
+
+这样我们就可以在执行后，用一个文本编辑器打开输出文件，慢慢阅读和分析输出结果。 
+
+
+如果把输入和输出的重定向结合起来，也可以这样执行： 
+
+
+C:>myprog < test.txt > test.out 
+
+
+2、输出调试信息 
+在调试时，很多同学往往首先想到的是使用开发环境所提供的调试功能：设置断点、单步执行、查看和修改变量，甚至改变程序的流程。不可否认，使用开发环境所提供的调试功能的确很方便，但当你过分依赖于这些集成工具时，你可能忽略了很多更有效的手段：仔细地分析、充分的信息。 
+
+
+当我们发现程序没有按照自己预期得那样工作时，不要急于跟踪甚至修改程序，而是应该首先仔细对程序的逻辑、语句、表达式进行检查和分析，尽可能使程序在表达上更简洁、更干净。如果实在难以发现问题所在，也不必急于借助于集成工具去跟踪程序的运行。早期的程序员在调试程序时经常会在程序中加入输出调试信息的语句或过程，用以观察程序的运行过程，分析程序的运行逻辑，这种调试手段即使在今天也仍然是非常有效的。 
+
+
+输出的调试信息要尽量容易阅读，格式清楚，在必要的时候，可以借助工具程序或自己编写的程序对输出信息进行处理，以帮助分析问题。 
+
+
+3、发现线索 
+调试的目的就是要分析错误发生的原因，寻找线索。盲目的调试只会浪费时间。 
+
+
+调试中的技巧很多，这里提出几条基本原则： 
+
+
+首先是要使错误可重现，要设法保证能够使错误按照自己的意愿重复出现。对于不知道什么时候会冒出来的错误，分析起来会困难得多！ 
+
+
+缩小导致错误的输入，设法构造出最小的又能保证错误出现的输入，这样可以减少变化的可能性，使分析范围更集中。经常可以采用二分选择的方法来选择输入，就是舍掉一半输入，看看错误是否会出现，如果不出现，则选择另一半输入，如此反复，并不断缩小导致错误的输入。 
+
+
+4、构造测试数据和测试程序 
+在题目中所给出的测试样例只是一小组测试数据，这虽然通常是我们用来测试程序的第一组数据，但却是远远不够的。我们应该根据题意自行构造更多的测试数据，尤其是一些边界状态的测试数据（数据极大、数据极小、数据量极多、数据量极少、预期出现极端结果等情况）。 
+
+
+边界测试数据可以用于检查程序中是否存在边界错误，设计有缺陷的程序，在处理边界测试数据时往往容易暴露出错误。但如果没有发生明显的运行错误，就需要对结果的正确性进行验证。 
+
+
+有些测试数据可以通过手工计算求出结果，再与程序的计算结果相对比，而也有些问题，可以通过构造测试程序来进行验证。 
+
+
+测试程序通常是用确定可靠的算法编写的解题程序，但不须考虑时间和空间的消耗，用测试程序对测试数据进行求解，用计算结果与待测试程序的计算结果进行对比。 
+
+
+以题1041--纯素数问题为例，我们可以用最简单的穷举法进行求解，也许这样的解法是不被接受的，因为效率太低，但这个解法却可以用作我们的测试程序，甚至——有同学索性在本地先用这个程序把结果算出来，再写一个程序直接输出结果——居然也被接受了！ 
+
+
+写得有点疲了，脑子也有点麻木了~~~~先这样吧，等缓一缓再说吧。
+2008-7-17 01:40 回复 
+
+
+
+
+狂晕的迷战士 
+14位粉丝 
+13楼
+第02篇 ACM/ICPC竞赛之STL简介 
+一、关于STL 
+
+
+STL(Standard Template Library，标准模板库）是C++语言标准中的重要组成部分。STL以模板类和模板函数的形式为程序员提供了各种数据结构和算法的精巧实现，程序员如果能够充分地利用STL，可以在代码空间、执行时间和编码效率上获得极大的好处。 
+
+
+
+
+STL大致可以分为三大类：算法(algorithm)、容器(container)、迭代器(iterator)。 
+
+
+STL容器是一些模板类，提供了多种组织数据的常用方法，例如vector(向量，类似于数组)、list(列表，类似于链表)、deque(双向队列)、set(集合)、map(映象)、stack(栈)、queue(队列)、priority_queue(优先队列)等，通过模板的参数我们可以指定容器中的元素类型。 
+
+
+STL算法是一些模板函数，提供了相当多的有用算法和操作，从简单如for_each（遍历）到复杂如stable_sort（稳定排序）。 
+
+
+STL迭代器是对C中的指针的一般化，用来将算法和容器联系起来。几乎所有的STL算法都是通过迭代器来存取元素序列进行工作的，而STL中的每一个容器也都定义了其本身所专有的迭代器，用以存取容器中的元素。有趣的是，普通的指针也可以像迭代器一样工作。 
+
+
+熟悉了STL后，你会发现，很多功能只需要用短短的几行就可以实现了。通过STL，我们可以构造出优雅而且高效的代码，甚至比你自己手工实现的代码效果还要好。 
+
+
+STL的另外一个特点是，它是以源码方式免费提供的，程序员不仅可以自由地使用这些代码，也可以学习其源码，甚至按照自己的需要去修改它。 
+
+
+下面是用STL写的题1067--Ugly Numbers的代码： 
+
+
+#include <iostream>#include <queue>using namespace std;typedef pair<unsigned long, int> node_type;main(){ unsigned long result[1500]; priority_queue< node_type, vector<node_type>, greater<node_type> > Q; Q.push( make_pair(1, 2) ); for (int i=0; i<1500; i++) { node_type node = Q.top(); Q.pop(); switch(node.second) { case 2: Q.push( make_pair(node.first*2, 2) ); case 3: Q.push( make_pair(node.first*3, 3) ); case 5: Q.push( make_pair(node.first*5, 5) ); } result[i] = node.first; } int n; cin >> n; while (n>0) { cout << result[n-1] << endl; cin >> n; } return 1;} 在ACM竞赛中，熟练掌握和运用STL对快速编写实现代码会有极大的帮助。 
+二、使用STL 
+在C++标准中，STL被组织为以下的一组头文件（注意，是没有.h后缀的！）： 
+
+
+algorithm / deque / functional / iterator / list / map 
+
+
+memory / numeric / queue / set / stack / utility / vector 
+
+
+当我们需要使用STL的某个功能时，需要嵌入相应的头文件。但要注意的是，在C++标准中，STL是被定义在std命名空间中的。如下例所示： 
+
+
+#include <stack> 
+
+
+main() 
+
+
+{ 
+
+
+std::stack<int> s; 
+
+
+s.push(0); 
+
+
+... 
+
+
+return 1; 
+
+
+} 
+
+
+如果希望在程序中直接引用STL，也可以在嵌入头文件后，用using namespace语句将std命名空间导入。如下例所示： 
+
+
+#include <stack> 
+
+
+using namespace std; 
+
+
+main() 
+
+
+{ 
+
+
+stack<int> s; 
+
+
+s.push(0); 
+
+
+... 
+
+
+return 1; 
+
+
+} 
+
+
+STL是C++语言机制运用的一个典范，通过学习STL可以更深刻地理解C++语言的思想和方法。在本系列的文章中不打算对STL做深入的剖析，而只是想介绍一些STL的基本应用。 
+
+
+有兴趣的同学，建议可以在有了一些STL的使用经验后，认真阅读一下《C++ STL》这本书（电力出版社有该书的中文版）。
+2008-7-17 01:54 回复 
+
+
+
+
+狂晕的迷战士 
+14位粉丝 
+14楼
+第08篇 ACM/ICPC竞赛之STL--map 
+在STL的头文件<map>中定义了模板类map和multimap，用有序二叉树来存贮类型为pair<const Key, T>的元素对序列。序列中的元素以const Key部分作为标识，map中所有元素的Key值都必须是唯一的，multimap则允许有重复的Key值。 
+
+
+可以将map看作是由Key标识元素的元素集合，这类容器也被称为“关联容器”，可以通过一个Key值来快速确定一个元素，因此非常适合于需要按照Key值查找元素的容器。 
+
+
+map模板类需要四个模板参数，第一个是键值类型，第二个是元素类型，第三个是比较算子，第四个是分配器类型。其中键值类型和元素类型是必要的。 
+
+
+map的基本操作有： 
+
+
+1、定义map对象，例如： 
+
+
+map<string, int> m; 
+
+
+2、向map中插入元素对，有多种方法，例如： 
+
+
+m[key] = value; 
+[key]操作是map很有特色的操作，如果在map中存在键值为key的元素对，则返回该元素对的值域部分，否则将会创建一个键值为key的元素对，值域为默认值。所以可以用该操作向map中插入元素对或修改已经存在的元素对的值域部分。 
+
+
+m.insert( make_pair(key, value) ); 
+也可以直接调用insert方法插入元素对，insert操作会返回一个pair，当map中没有与key相匹配的键值时，其first是指向插入元素对的迭代器，其second为true；若map中已经存在与key相等的键值时，其first是指向该元素对的迭代器，second为false。 
+
+
+3、查找元素对，例如： 
+
+
+int i = m[key]; 
+要注意的是，当与该键值相匹配的元素对不存在时，会创建键值为key的元素对。 
+
+
+map<string, int>::iterator it = m.find(key); 
+如果map中存在与key相匹配的键值时，find操作将返回指向该元素对的迭代器，否则，返回的迭代器等于map的end()（参见vector中提到的begin和end操作）。 
+
+
+4、删除元素对，例如： 
+
+
+m.erase(key); 
+删除与指定key键值相匹配的元素对，并返回被删除的元素的个数。 
+
+
+m.erase(it); 
+删除由迭代器it所指定的元素对，并返回指向下一个元素对的迭代器。 
+
+
+看一段简单的示例代码： 
+
+
+#include<map>#include<iostream> using namespace std; typedef map<int, string, less<int> > M_TYPE;typedef M_TYPE::iterator M_IT;typedef M_TYPE::const_iterator M_CIT; int main(){ M_TYPE MyTestMap; MyTestMap[3] = "No.3"; MyTestMap[5] = "No.5"; MyTestMap[1] = "No.1"; MyTestMap[2] = "No.2"; MyTestMap[4] = "No.4"; M_IT it_stop = MyTestMap.find(2); cout << "MyTestMap[2] = " << it_stop->second << endl; it_stop->second = "No.2 After modification"; cout << "MyTestMap[2] = " << it_stop->second << endl; cout << "Map contents : " << endl; for(M_CIT it = MyTestMap.begin(); it != MyTestMap.end(); it++) { cout << it->second << endl; } return 0;} 
+程序执行的输出结果为： 
+
+
+MyTestMap[2] = No.2 
+MyTestMap[2] = No.2 After modification 
+Map contents : 
+No.1 
+No.2 After modification 
+No.3 
+No.4 
+No.5 
+
+
+再看一段简单的示例代码： 
+
+
+#include <iostream> 
+#include <map> 
+using namespace std; 
+main() 
+{ 
+map<string, int> m; 
+m["one"] = 1; 
+m["two"] = 2; 
+// 几种不同的insert调用方法 
+m.insert(make_pair("three", 3)); 
+m.insert(map<string, int>::value_type("four", 4)); 
+m.insert(pair<string, int>("five", 5)); 
+
+
+string key; 
+while (cin>>key) 
+{ 
+map<string, int>::iterator it = m.find(key); 
+if (it==m.end()) 
+{ 
+cout << "No such key!" << endl; 
+} 
+else 
+{ 
+cout << key << " is " << it->second << endl; 
+cout << "Erased " << m.erase(key) << endl; 
+} 
+} 
+return 1; 
+}
+
+
+
